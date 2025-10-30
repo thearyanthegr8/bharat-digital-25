@@ -3,11 +3,20 @@ from sqlalchemy.orm import Session
 from . import models, schemas  # Make sure schemas is imported
 from .database import get_db, engine
 from typing import List
+from fastapi.middleware.cors import CORSMiddleware
 
 # Create DB tables on startup
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # <-- This allows all domains
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 
 @app.get("/")

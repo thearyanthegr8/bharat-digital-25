@@ -11,15 +11,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432" # Expose for local inspection (optional)
 
   # 2. Queue Broker Service
   redis:
     image: redis:7-alpine
     container_name: mgnrega_redis
-    ports:
-      - "6379:6379" # Expose for local inspection (optional)
 
   # 3. Backend API Service (FastAPI)
   backend:
@@ -50,23 +46,34 @@ services:
       - db
       - redis
 
-  # 5. Frontend Service (Next.js)
-  frontend:
-    environment:
-      # THIS LINE IS THE KEY FOR WINDOWS/MACOS
-      CHOKIDAR_USEPOLLING: "true"
-    container_name: mgnrega_frontend
-    build: ./frontend
-
-    command: npm run dev -- -H 0.0.0.0
-
+  nginx:
+    image: nginx:latest
+    container_name: mgnrega_nginx
     ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/usr/src/app
-      - /usr/src/app/node_modules # Don't overwrite node_modules
+      - "80:80"
+      - "443:443"
     depends_on:
       - backend
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  # 5. Frontend Service (Next.js)
+  # frontend:
+  #   environment:
+  #     # THIS LINE IS THE KEY FOR WINDOWS/MACOS
+  #     CHOKIDAR_USEPOLLING: "true"
+  #   container_name: mgnrega_frontend
+  #   build: ./frontend
+
+  #   command: npm run dev -- -H 0.0.0.0
+
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend:/usr/src/app
+  #     - /usr/src/app/node_modules # Don't overwrite node_modules
+  #   depends_on:
+  #     - backend
 
 volumes:
   postgres_data:
