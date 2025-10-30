@@ -15,7 +15,7 @@ export async function GET(
       );
     }
 
-    const backendUrl = process.env.BACKEND_API_URL || "http://backend:8000";
+    const backendUrl = process.env.BACKEND_API_URL;
     const apiUrl = `${backendUrl}/api/district`;
 
     const response = await axios.get(apiUrl, {

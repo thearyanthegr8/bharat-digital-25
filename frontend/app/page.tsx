@@ -43,16 +43,23 @@ export default function Home() {
         async (pos) => {
           try {
             const res = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`
+              `https://api.aryantomar.com/api/geocode/reverse/?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`
             );
+
+            if (!res.ok) {
+              throw new Error("Geocoding failed");
+            }
+
             const data = await res.json();
+
             setDetected(
               data.address?.state_district ||
                 data.address?.county ||
                 "Unknown District"
             );
             setStatus("granted");
-          } catch {
+          } catch (error) {
+            console.error("Geocoding error:", error);
             setStatus("denied");
           }
         },

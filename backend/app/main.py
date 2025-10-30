@@ -4,6 +4,7 @@ from . import models, schemas  # Make sure schemas is imported
 from .database import get_db, engine
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
+import httpx
 
 # Create DB tables on startup
 models.Base.metadata.create_all(bind=engine)
@@ -22,6 +23,21 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"message": "MGNREGA Data API"}
+
+
+@app.get("/api/geocode/reverse/")
+async def reverse_geocode(lat: float = Query(...), lon: float = Query(...)):
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(
+                f"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}",
+                headers={"User-Agent": "MGNREGA-App/1.0 (contact@aryantomar.com)"},
+                timeout=10.0,
+            )
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            return {"error": str(e)}
 
 
 @app.get(

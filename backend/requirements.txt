@@ -6,3 +6,4 @@ celery[redis]
 requests
 pydantic
 python-dotenv
+httpx
