@@ -3,21 +3,28 @@ import {
   DM_Sans,
   Geist,
   Geist_Mono,
+  Poppins,
   Roboto,
   Tiro_Devanagari_Hindi,
 } from "next/font/google";
 import "./globals.css";
 
-const dm_sans = DM_Sans({
-  variable: "--font-sans",
-  subsets: ["latin"],
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin", "devanagari"],
+  weight: "400",
 });
 
-const devanagari = Tiro_Devanagari_Hindi({
-  weight: "400",
-  variable: "--font-tiro",
-  subsets: ["devanagari"],
-});
+// const dm_sans = DM_Sans({
+//   variable: "--font-sans",
+//   subsets: ["latin"],
+// });
+
+// const devanagari = Tiro_Devanagari_Hindi({
+//   weight: "400",
+//   variable: "--font-tiro",
+//   subsets: ["devanagari"],
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,9 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${dm_sans.variable} ${dm_sans.className} ${devanagari.className} ${devanagari.variable} antialiased`}
-      >
+      <body className={`${poppins.variable} ${poppins.className} antialiased`}>
         {children}
       </body>
     </html>

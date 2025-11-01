@@ -3,16 +3,6 @@ import { Suspense } from "react";
 import { districts } from "@/lib/districts";
 import DistrictDataDisplay from "@/components/DistrictDataDisplay";
 import axios from "axios";
-import { Database, Icon, LoaderIcon, Map } from "lucide-react";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
-import { Button } from "@/components/ui/button";
 
 export interface PerformanceData {
   id: number;
@@ -38,6 +28,9 @@ async function getDistrictData(
   districtName: string
 ): Promise<PerformanceData[]> {
   try {
+    const url = `/api/district/${districtName}`;
+    console.log(`Fetching data from Next.js API: ${url}`);
+
     const response = await axios.get(
       `${process.env.BACKEND_API_URL}/api/district`,
       {
@@ -46,6 +39,8 @@ async function getDistrictData(
         },
       }
     );
+
+    console.log(response.request);
 
     const data = response.data;
 
@@ -73,7 +68,8 @@ async function getDistrictData(
 function LoadingSpinner() {
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-200px)]">
-      <LoaderIcon className="animate-spin" />
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+      <p className="ml-4 text-xl text-gray-600">Loading data...</p>
     </div>
   );
 }
@@ -87,21 +83,12 @@ async function DistrictDataContainer({
 
   if (!allData || allData.length === 0) {
     return (
-      <section className="w-full flex-1 flex justify-center items-center">
-        <div className="w-full max-w-[30rem]">
-          <Empty className="border border-dashed w-full">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <Database />
-              </EmptyMedia>
-              <EmptyTitle>No data</EmptyTitle>
-              <EmptyDescription>
-                No performance data has been found for: {districtName}
-              </EmptyDescription>
-            </EmptyHeader>
-          </Empty>
-        </div>
-      </section>
+      <>
+        <h1 className="text-3xl font-bold mb-4">District: {districtName}</h1>
+        <p className="text-xl text-gray-600">
+          No performance data found for this district.
+        </p>
+      </>
     );
   }
 
@@ -127,7 +114,7 @@ export default async function DistrictPage({
   const districtName = districts[id_district];
 
   return (
-    <main className="min-h-screen w-full px-4 py-8 md:py-8 flex flex-col bg-[#f9fbfc]">
+    <main className="bg-white min-h-screen w-full px-4 py-8 md:p-8">
       <Suspense fallback={<LoadingSpinner />}>
         <DistrictDataContainer districtName={districtName} />
       </Suspense>

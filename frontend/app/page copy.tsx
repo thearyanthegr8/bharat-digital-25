@@ -67,19 +67,19 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!isRedirecting) return;
+  // useEffect(() => {
+  //   if (!isRedirecting) return;
 
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    }
+  //   if (countdown > 0) {
+  //     const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+  //     return () => clearTimeout(timer);
+  //   }
 
-    const idx = districts.findIndex(
-      (d) => d.toLowerCase() === detected?.toLowerCase()
-    );
-    router.push(`/district/${idx >= 0 ? idx : 0}`);
-  }, [countdown, isRedirecting, detected, router]);
+  //   const idx = districts.findIndex(
+  //     (d) => d.toLowerCase() === detected?.toLowerCase()
+  //   );
+  //   router.push(`/district/${idx >= 0 ? idx : 0}`);
+  // }, [countdown, isRedirecting, detected, router]);
 
   useEffect(() => {
     if (!isRedirecting) return;
