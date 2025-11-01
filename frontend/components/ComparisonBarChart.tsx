@@ -10,6 +10,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Cell, // 1. Import Cell from recharts
 } from "recharts";
 import {
   Card,
@@ -21,13 +22,13 @@ import {
 
 interface ComparisonBarChartProps {
   currentData: PerformanceData;
-  previousData?: PerformanceData; // Optional, as previous year data might not always be there
+  previousData?: PerformanceData;
   dataKey: keyof PerformanceData;
-  label: string; // e.g., "परिवार" for families
+  label: string;
   title: string;
   description: string;
-  currentLabel?: string; // e.g., "इस साल"
-  previousLabel?: string; // e.g., "पिछला साल"
+  currentLabel?: string;
+  previousLabel?: string;
   currentBarColor?: string;
   previousBarColor?: string;
 }
@@ -41,18 +42,18 @@ export default function ComparisonBarChart({
   description,
   currentLabel = "इस साल",
   previousLabel = "पिछला साल",
-  currentBarColor = "#4ade80", // Greenish
-  previousBarColor = "#facc15", // Yellowish
+  currentBarColor = "hsl(var(--primary))", // Use theme-aware color
+  previousBarColor = "hsl(var(--secondary))", // Use theme-aware color
 }: ComparisonBarChartProps) {
   const chartData = [
     {
       name: currentLabel,
-      value: currentData[dataKey] || 0,
+      value: (currentData[dataKey] as number) || 0,
       color: currentBarColor,
     },
     {
       name: previousLabel,
-      value: previousData ? previousData[dataKey] || 0 : 0,
+      value: previousData ? (previousData[dataKey] as number) || 0 : 0,
       color: previousBarColor,
     },
   ];
@@ -66,10 +67,8 @@ export default function ComparisonBarChart({
         </CardDescription>
       </CardHeader>
       <CardContent className="h-[calc(100%-80px)]">
-        {" "}
-        {/* Adjust height to fit */}
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} layout="vertical">
+          <BarChart data={chartData} layout="vertical" margin={{ right: 30 }}>
             <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.5} />
             <XAxis
               type="number"
@@ -86,9 +85,12 @@ export default function ComparisonBarChart({
               }}
               labelStyle={{ color: "hsl(var(--foreground))" }}
             />
-            <Bar dataKey="value" fill="#8884d8">
+
+            {/* 2. Remove the map from inside the <Bar> tag */}
+            <Bar dataKey="value">
+              {/* 3. Map over chartData to create a <Cell> for each bar */}
               {chartData.map((entry, index) => (
-                <Bar key={`bar-${index}`} fill={entry.color} />
+                <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Bar>
           </BarChart>

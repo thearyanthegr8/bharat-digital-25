@@ -245,8 +245,8 @@ export default function DistrictDataDisplay({
               label="परिवार"
               title="काम पाने वाले परिवार"
               description="यह लाइन दिखाती है कि हर महीने कितने परिवारों को काम मिला।"
-              // Use theme-aware CSS variables for color
-              color="hsl(var(--primary))"
+              // FIXED: Revert to the explicit Tailwind color
+              color="#3b82f6"
             />
             <TrendLineChart
               data={last12MonthsData}
@@ -254,9 +254,8 @@ export default function DistrictDataDisplay({
               label="%"
               title="पैसे मिलने की रफ़्तार"
               description="यह लाइन दिखाती है कि हर महीने पैसा कितने लोगों को समय पर मिला।"
-              // Using a green color (assuming you add this to globals.css)
-              // If not, you can use "hsl(var(--primary))" again
-              color="hsl(var(--green-500))" // See globals.css suggestion below
+              // FIXED: Revert to the explicit Tailwind color
+              color="#10b981"
             />
           </div>
         </div>
@@ -276,8 +275,9 @@ export default function DistrictDataDisplay({
               description="यह दिखाता है कि इस साल, पिछले साल के मुकाबले ज़्यादा परिवारों को काम मिला या कम।"
               currentLabel="इस साल"
               previousLabel="पिछला साल"
-              currentBarColor="hsl(var(--primary))"
-              previousBarColor="hsl(var(--secondary))" // Use secondary for comparison
+              // FIXED: Revert to the explicit Tailwind colors
+              currentBarColor="#34d399"
+              previousBarColor="#fbbf24"
             />
             <ComparisonBarChart
               currentData={latestData}
@@ -288,8 +288,9 @@ export default function DistrictDataDisplay({
               description="यह तुलना करता है कि इस साल और पिछले साल कितने परिवारों ने 100 दिन का काम पूरा किया।"
               currentLabel="इस साल"
               previousLabel="पिछला साल"
-              currentBarColor="hsl(var(--primary))"
-              previousBarColor="hsl(var(--secondary))"
+              // FIXED: Revert to the explicit Tailwind colors
+              currentBarColor="#60a5fa"
+              previousBarColor="#a78bfa"
             />
           </div>
         </div>
